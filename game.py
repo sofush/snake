@@ -21,6 +21,7 @@ clock = pg.time.Clock()
 running = True
 
 # a tile has a color, unique coordinate and a pointer to the board that owns the tile
+# the pointer allows for easy navigation of the board through the class's `get_adjacent_tile` method
 class Tile:
     def __init__(self, board, x, y, color: Color):
         self.parent = board
@@ -42,6 +43,10 @@ class Tile:
             case "right":
                 return board.get_tile(self.x + 1, self.y)
 
+# the snake is controlled by the player
+# the player's goal is to grow the snake
+# the snake grows when it moves onto a fruit which consumes the fruit
+# then a randomly selected tile will be appointed as the next fruit
 class Snake:
     def __init__(self, board, start_pos: (int, int)):
         self.board = board
@@ -53,6 +58,7 @@ class Snake:
 
         self.tiles = deque([start_tile])
 
+    # sets the direction the snake will move in on the next game tick
     def set_direction(self, direction: str):
         if direction not in DIRECTIONS:
             print(f'error: {direction} is not a valid direction')
@@ -61,12 +67,15 @@ class Snake:
             print(f'debug: updating direction to {direction}')
             self.direction = direction
 
+    # retrieves the tile that holds the snake's head
     def get_head_tile(self):
         return self.tiles[self.length - 1]
 
+    # retrieves the tile that holds the snake's tail
     def get_tail_tile(self):
         return self.tiles[0]
 
+    # updates the snake's position
     def move(self):
         head = self.get_head_tile()
         next_tile = head.get_adjacent_tile(self.direction)
@@ -80,6 +89,7 @@ class Snake:
         self.tiles.append(next_tile)
         return True
 
+# the board holds a two-dimensional array of tiles
 class Board:
     def __init__(self, width, height):
         if width == 0 or height == 0:
@@ -96,6 +106,7 @@ class Board:
     def get_tile(self, x, y):
         return self.tiles[x % self.width][y % self.height]
 
+# the event handler handles pygame events and ticks
 class EventHandler:
     def __init__(self, snake: Snake):
         self.tick_counter = 0
@@ -143,15 +154,18 @@ class EventHandler:
         print('game over')
         self.stop()
 
+# the painter paints the board
 class Painter:
     def __init__(self, board: Board):
         self.MARGIN_PX = 2
         self.board = board
-        self.tile_size = self.calculate_tile_rect()
+        self.tile_size = self.calculate_tile_size()
 
+    # clears the screen
     def clear(self):
         screen.fill(BACKGROUND_COLOR)
 
+    # draws a new frame
     def paint(self):
         self.clear()
         for x in range(self.board.width):
@@ -163,7 +177,7 @@ class Painter:
                 rect = Rect((left, top), (self.tile_size))
                 pg.draw.rect(screen, tile.color, rect)
 
-    def calculate_tile_rect(self):
+    def calculate_tile_size(self):
         margin_width_total = self.MARGIN_PX * (board.width + 1)
         margin_height_total = self.MARGIN_PX * (board.height + 1)
 
