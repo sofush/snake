@@ -13,7 +13,7 @@ SNAKE_COLOR = Color(0, 255, 0)
 TILE_COLOR = Color(50, 50, 50)
 BACKGROUND_COLOR = Color(0, 0, 0, 255)
 DIRECTIONS = ["up", "left", "down", "right"]
-TICK_RATE = 60
+FRAMERATE = 60
 
 # initialize
 pg.init()
@@ -64,8 +64,10 @@ class Snake:
             print(f'error: {direction} is not a valid direction')
             exit()
         elif self.direction != direction:
-            print(f'debug: updating direction to {direction}')
-            self.direction = direction
+            destination = self.get_head_tile().get_adjacent_tile(direction)
+            if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
+                print(f'debug: updating direction to {direction}')
+                self.direction = direction
 
     # retrieves the tile that holds the snake's head
     def get_head_tile(self):
@@ -156,7 +158,7 @@ class EventHandler:
                     self.snake.set_direction("right")
 
     def tick(self):
-        self.tick_counter = (self.tick_counter + 1) % (TICK_RATE / 4)
+        self.tick_counter = (self.tick_counter + 1) % (FRAMERATE / 4)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
@@ -227,4 +229,4 @@ while running:
     event_handler.tick()
     painter.paint()
     pg.display.flip()
-    clock.tick(TICK_RATE)
+    clock.tick(FRAMERATE)
