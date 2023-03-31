@@ -1,135 +1,18 @@
 #!/usr/bin/env python3
-from collections import deque
-import random
 import pygame as pg
 from pygame import Color
 from pygame.surface import Surface
 from pygame.event import Event
 from pygame.rect import Rect
-
-# constants
-FRUIT_COLOR = Color(255, 0, 0)
-SNAKE_COLOR = Color(0, 255, 0)
-TILE_COLOR = Color(50, 50, 50)
-BACKGROUND_COLOR = Color(0, 0, 0, 255)
-DIRECTIONS = ["up", "left", "down", "right"]
-FRAMERATE = 60
+from board import Tile, Board
+from player import Snake
+from constants import *
 
 # initialize
 pg.init()
 screen = pg.display.set_mode((720, 720))
 clock = pg.time.Clock()
 running = True
-
-# a tile has a color, unique coordinate and a pointer to the board that owns the tile
-# the pointer allows for easy navigation of the board through the class's `get_adjacent_tile` method
-class Tile:
-    def __init__(self, board, x, y, color: Color):
-        self.parent = board
-        self.color = color
-        self.x = x
-        self.y = y
-
-    def get_adjacent_tile(self, direction):
-        match direction:
-            case "up":
-                return board.get_tile(self.x, self.y - 1)
-
-            case "down":
-                return board.get_tile(self.x, self.y + 1)
-
-            case "left":
-                return board.get_tile(self.x - 1, self.y)
-
-            case "right":
-                return board.get_tile(self.x + 1, self.y)
-
-# the snake is controlled by the player
-# the player's goal is to grow the snake
-# the snake grows when it moves onto a fruit which consumes the fruit
-# then a randomly selected tile will be appointed as the next fruit
-class Snake:
-    def __init__(self, board, start_pos: (int, int)):
-        self.board = board
-        self.direction = "right"
-
-        start_tile = self.board.get_tile(start_pos[0], start_pos[1])
-        start_tile.color = SNAKE_COLOR
-
-        self.tiles = deque([start_tile])
-
-    # sets the direction the snake will move in on the next game tick
-    def set_direction(self, direction: str):
-        if direction not in DIRECTIONS:
-            print(f'error: {direction} is not a valid direction')
-            exit()
-        elif self.direction != direction:
-            destination = self.get_head_tile().get_adjacent_tile(direction)
-            if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
-                print(f'debug: updating direction to {direction}')
-                self.direction = direction
-
-    # retrieves the tile that holds the snake's head
-    def get_head_tile(self):
-        return self.tiles[-1]
-
-    # retrieves the tile that holds the snake's tail
-    def get_tail_tile(self):
-        return self.tiles[0]
-
-    # updates the snake's position
-    # this returns False if the snake has moved onto itself,
-    #   otherwise it returns True
-    def move(self):
-        head = self.get_head_tile()
-        next_tile = head.get_adjacent_tile(self.direction)
-
-        if next_tile.color == FRUIT_COLOR:
-            print(f'debug: snake ate a fruit at {next_tile.x}, {next_tile.y}')
-            self.tiles.append(next_tile)
-            next_tile.color = SNAKE_COLOR
-            self.board.spawn_fruit()
-            return True
-        elif next_tile.color == SNAKE_COLOR:
-            print(f'debug: snake tried to move onto itself at {next_tile.x}, {next_tile.y}')
-            return False
-        else:
-            print(f'debug: moving to {next_tile.x}, {next_tile.y}')
-            next_tile.color = SNAKE_COLOR
-            self.tiles.popleft().color = TILE_COLOR
-            self.tiles.append(next_tile)
-            return True
-
-# the board holds a two-dimensional array of tiles
-class Board:
-    def __init__(self, width, height):
-        if width == 0 or height == 0:
-            print("error: width and height of board must be at least 1")
-
-        self.width = width
-        self.height = height
-
-        self.tiles = [[0 for x in range(width)] for y in range(height)]
-        for x in range(width):
-            for y in range(height):
-                self.tiles[x][y] = Tile(self, x, y, TILE_COLOR)
-
-    # gets a tile on the board
-    # if x or y is greater than the boards width or height respectively,
-    #   it wraps around the board and returns that tile instead
-    def get_tile(self, x, y):
-        return self.tiles[x % self.width][y % self.height]
-
-    def spawn_fruit(self):
-        normal_tiles = []
-        
-        for row in self.tiles:
-            for tile in row:
-                if tile.color == TILE_COLOR:
-                    normal_tiles.append(tile)
-
-        fruit_tile = random.choice(normal_tiles)
-        fruit_tile.color = FRUIT_COLOR
 
 # the event handler handles pygame events and ticks
 class EventHandler:
@@ -230,3 +113,4 @@ while running:
     painter.paint()
     pg.display.flip()
     clock.tick(FRAMERATE)
+
