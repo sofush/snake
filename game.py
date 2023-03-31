@@ -76,6 +76,8 @@ class Snake:
         return self.tiles[0]
 
     # updates the snake's position
+    # this returns False if the snake has moved onto itself,
+    #   otherwise it returns True
     def move(self):
         head = self.get_head_tile()
         next_tile = head.get_adjacent_tile(self.direction)
@@ -100,6 +102,9 @@ class Board:
             for y in range(height):
                 self.tiles[x][y] = Tile(self, x, y, TILE_COLOR)
 
+    # gets a tile on the board
+    # if x or y is greater than the boards width or height respectively,
+    #   it wraps around the board and returns that tile instead
     def get_tile(self, x, y):
         return self.tiles[x % self.width][y % self.height]
 
