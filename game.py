@@ -80,9 +80,6 @@ class Snake:
         head = self.get_head_tile()
         next_tile = head.get_adjacent_tile(self.direction)
 
-        if next_tile == None:
-            return False
-
         print(f'debug: moving to {next_tile.x}, {next_tile.y}')
         next_tile.color = SNAKE_COLOR
         self.tiles.popleft().color = TILE_COLOR
