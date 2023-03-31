@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from collections import deque
+import random
 import pygame as pg
 from pygame import Color
 from pygame.surface import Surface
@@ -51,7 +52,6 @@ class Snake:
     def __init__(self, board, start_pos: (int, int)):
         self.board = board
         self.direction = "right"
-        self.length = 1
 
         start_tile = self.board.get_tile(start_pos[0], start_pos[1])
         start_tile.color = SNAKE_COLOR
@@ -69,7 +69,7 @@ class Snake:
 
     # retrieves the tile that holds the snake's head
     def get_head_tile(self):
-        return self.tiles[self.length - 1]
+        return self.tiles[-1]
 
     # retrieves the tile that holds the snake's tail
     def get_tail_tile(self):
@@ -82,11 +82,21 @@ class Snake:
         head = self.get_head_tile()
         next_tile = head.get_adjacent_tile(self.direction)
 
-        print(f'debug: moving to {next_tile.x}, {next_tile.y}')
-        next_tile.color = SNAKE_COLOR
-        self.tiles.popleft().color = TILE_COLOR
-        self.tiles.append(next_tile)
-        return True
+        if next_tile.color == FRUIT_COLOR:
+            print(f'debug: snake ate a fruit at {next_tile.x}, {next_tile.y}')
+            self.tiles.append(next_tile)
+            next_tile.color = SNAKE_COLOR
+            self.board.spawn_fruit()
+            return True
+        elif next_tile.color == SNAKE_COLOR:
+            print(f'debug: snake tried to move onto itself at {next_tile.x}, {next_tile.y}')
+            return False
+        else:
+            print(f'debug: moving to {next_tile.x}, {next_tile.y}')
+            next_tile.color = SNAKE_COLOR
+            self.tiles.popleft().color = TILE_COLOR
+            self.tiles.append(next_tile)
+            return True
 
 # the board holds a two-dimensional array of tiles
 class Board:
@@ -107,6 +117,17 @@ class Board:
     #   it wraps around the board and returns that tile instead
     def get_tile(self, x, y):
         return self.tiles[x % self.width][y % self.height]
+
+    def spawn_fruit(self):
+        normal_tiles = []
+        
+        for row in self.tiles:
+            for tile in row:
+                if tile.color == TILE_COLOR:
+                    normal_tiles.append(tile)
+
+        fruit_tile = random.choice(normal_tiles)
+        fruit_tile.color = FRUIT_COLOR
 
 # the event handler handles pygame events and ticks
 class EventHandler:
@@ -135,7 +156,7 @@ class EventHandler:
                     self.snake.set_direction("right")
 
     def tick(self):
-        self.tick_counter = (self.tick_counter + 1) % (TICK_RATE / 2)
+        self.tick_counter = (self.tick_counter + 1) % (TICK_RATE / 4)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
@@ -193,9 +214,11 @@ class Painter:
         return (size, size)
 
 board = Board(15, 15)
-snake = Snake(board, (5, 5))
+snake = Snake(board, start_pos = (5, 5))
 painter = Painter(board)
 event_handler = EventHandler(snake)
+
+board.spawn_fruit()
 
 while running:
     for event in pg.event.get():
