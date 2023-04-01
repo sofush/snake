@@ -37,13 +37,13 @@ class Board:
         self.tiles = [[0 for x in range(width)] for y in range(height)]
         for x in range(width):
             for y in range(height):
-                self.tiles[x][y] = Tile(self, x, y, TILE_COLOR)
+                self.tiles[y][x] = Tile(self, x, y, TILE_COLOR)
 
     # gets a tile on the board
     # if x or y is greater than the boards width or height respectively,
     #   it wraps around the board and returns that tile instead
     def get_tile(self, x, y):
-        return self.tiles[x % self.width][y % self.height]
+        return self.tiles[y % self.height][x % self.width]
 
     def spawn_fruit(self):
         normal_tiles = []
