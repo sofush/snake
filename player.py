@@ -19,7 +19,7 @@ class Snake:
     def set_direction(self, direction: str):
         if direction not in DIRECTIONS:
             print(f'error: {direction} is not a valid direction')
-            exit()
+            exit(1)
         elif self.direction != direction:
             destination = self.get_head_tile().get_adjacent_tile(direction)
             if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):

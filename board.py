@@ -30,6 +30,7 @@ class Board:
     def __init__(self, width, height):
         if width == 0 or height == 0:
             print("error: width and height of board must be at least 1")
+            exit(1)
 
         self.width = width
         self.height = height
