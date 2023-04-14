@@ -41,15 +41,18 @@ class Snake:
         if next_tile.color == FRUIT_COLOR:
             self.tiles.append(next_tile)
             next_tile.color = SNAKE_COLOR
-            self.board.spawn_fruit()
+
+            max_fruits = 1 + int(self.length() / 10)
+            self.board.spawn_fruit(max_fruits)
             return True
-        elif next_tile.color == SNAKE_COLOR:
+
+        if next_tile.color == SNAKE_COLOR:
             return False
-        else:
-            next_tile.color = SNAKE_COLOR
-            self.tiles.popleft().color = TILE_COLOR
-            self.tiles.append(next_tile)
-            return True
+
+        next_tile.color = SNAKE_COLOR
+        self.tiles.popleft().color = TILE_COLOR
+        self.tiles.append(next_tile)
+        return True
 
     def length(self):
         return len(self.tiles)

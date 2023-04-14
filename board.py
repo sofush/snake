@@ -46,14 +46,19 @@ class Board:
     def get_tile(self, x, y):
         return self.tiles[y % self.height][x % self.width]
 
-    def spawn_fruit(self):
+    def spawn_fruit(self, max: int = 1):
         normal_tiles = []
+        fruit_tiles = []
         
         for row in self.tiles:
             for tile in row:
                 if tile.color == TILE_COLOR:
                     normal_tiles.append(tile)
+                elif tile.color == FRUIT_COLOR:
+                    fruit_tiles.append(tile)
 
-        fruit_tile = random.choice(normal_tiles)
-        fruit_tile.color = FRUIT_COLOR
+        if len(fruit_tiles) < max:
+            for i in range(max - len(fruit_tiles)):
+                fruit_tile = random.choice(normal_tiles)
+                fruit_tile.color = FRUIT_COLOR
 

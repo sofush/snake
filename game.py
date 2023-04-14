@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from enum import Enum
+from enum import IntEnum
 import pygame as pg
 from pygame import Color
 from pygame.surface import Surface
@@ -18,7 +18,7 @@ font.set_bold(True)
 screen = pg.display.set_mode((DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT))
 clock = pg.time.Clock()
 
-class GameState(Enum):
+class GameState(IntEnum):
     MENU = 1
     PLAYING = 2
     EXITING = 3
