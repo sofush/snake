@@ -119,7 +119,7 @@ class Painter:
             instruction_pos = (center_width, center_height + instruction_height_offset)
 
             highscore = data.get_highscore()
-            highscore_str = f'HIGHSCORE: {highscore}'
+            highscore_str = f'HIGHSCORE ({highscore.date}): {highscore.score}'
             highscore_text = font.render(highscore_str, True, FONT_COLOR)
             highscore_height_offset = highscore_text.get_height()
             highscore_pos = (center_width, center_height + highscore_height_offset)
@@ -128,7 +128,9 @@ class Painter:
             highscore_rect = highscore_text.get_rect(center=highscore_pos)
 
             screen.blit(instruction_text, instruction_rect)
-            screen.blit(highscore_text, highscore_rect)
+
+            if highscore.date != None:
+                screen.blit(highscore_text, highscore_rect)
 
     def calculate_tile_size(self):
         margin_width_total = MARGIN_PX * (board.width + 1)

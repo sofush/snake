@@ -1,6 +1,7 @@
 import sqlite3
-from datetime import datetime
+from datetime import date
 from constants import *
+from score import Score
 
 class Data():
     def __init__(self):
@@ -20,26 +21,31 @@ class Data():
         self.database.commit()
 
     def add_entry(self, score: int):
-        now = datetime.now()
+        now = date.today()
         cursor = self.database.cursor()
         
         try:
             cursor.execute("""INSERT INTO scores (score, date) VALUES (?, ?)""", (score, now))
             self.database.commit()
-            self.cached_highscore = None
             print(f'added score entry with a score of {score}')
+
+            if self.cached_highscore.is_none() or score > self.cached_highscore.score:
+                self.cached_highscore = Score(score, now)
+                print(f'new highscore with a score of {score}')
         except Exception as e:
             print(e)
 
-    def get_highscore(self):
+    def get_highscore(self) -> Score:
         if self.cached_highscore == None:
             cursor = self.database.cursor()
 
             try:
-                cursor.execute("""SELECT MAX(score) FROM scores""")
+                cursor.execute("""SELECT MAX(score),date FROM scores""")
             except Exception as e:
                 print(e)
 
-            self.cached_highscore = cursor.fetchone()[0]
+            result = cursor.fetchone()
+            print(f'updating cached highscore to {result}')
+            self.cached_highscore = Score(result[0], result[1])
 
         return self.cached_highscore
