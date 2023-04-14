@@ -21,7 +21,6 @@ class Snake:
         elif self.direction != direction:
             destination = self.get_head_tile().get_adjacent_tile(direction)
             if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
-                print(f'debug: updating direction to {direction}')
                 self.direction = direction
 
     # retrieves the tile that holds the snake's head
@@ -40,16 +39,13 @@ class Snake:
         next_tile = head.get_adjacent_tile(self.direction)
 
         if next_tile.color == FRUIT_COLOR:
-            print(f'debug: snake ate a fruit at {next_tile.x}, {next_tile.y}')
             self.tiles.append(next_tile)
             next_tile.color = SNAKE_COLOR
             self.board.spawn_fruit()
             return True
         elif next_tile.color == SNAKE_COLOR:
-            print(f'debug: snake tried to move onto itself at {next_tile.x}, {next_tile.y}')
             return False
         else:
-            print(f'debug: moving to {next_tile.x}, {next_tile.y}')
             next_tile.color = SNAKE_COLOR
             self.tiles.popleft().color = TILE_COLOR
             self.tiles.append(next_tile)

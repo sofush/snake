@@ -13,4 +13,5 @@ DEFAULT_SCREEN_WIDTH = 720
 FRAMERATE = 60
 
 DIRECTIONS = ['up', 'left', 'down', 'right']
+DATABASE_PATH = 'snake.db'
 

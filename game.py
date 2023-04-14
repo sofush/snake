@@ -8,6 +8,7 @@ from pygame.rect import Rect
 from board import Tile, Board
 from player import Snake
 from constants import *
+from data import Data
 
 # initialize
 pg.init()
@@ -23,6 +24,7 @@ class GameState(Enum):
     EXITING = 3
 
 state = GameState.MENU
+data = Data()
 
 # the event handler handles pygame events and ticks
 class EventHandler:
@@ -70,13 +72,12 @@ class EventHandler:
                 self.game_over()
 
     def stop(self):
-        global state, data
+        global state
         state = GameState.EXITING
 
     def game_over(self):
-        global state
-        # TODO
-        # data.update_highscore(self.snake.length())
+        global state, data
+        data.add_entry(self.snake.length() - 1)
         state = GameState.MENU
         self.snake.reset()
 
@@ -93,6 +94,7 @@ class Painter:
 
     # draws a new frame
     def paint(self):
+        global data
         self.clear()
 
         if state == GameState.PLAYING:
@@ -104,7 +106,7 @@ class Painter:
                     top = MARGIN_PX + (MARGIN_PX * tile.y) + tile.y * self.tile_size[1]
                     rect = Rect((left, top), (self.tile_size))
                     pg.draw.rect(screen, tile.color, rect)
-            
+
             score_surface = font.render(f'Score: {self.snake.length() - 1}', True, FONT_COLOR)
             screen.blit(score_surface, (10, 10))
         elif state == GameState.MENU:
@@ -116,10 +118,7 @@ class Painter:
             instruction_height_offset = -(instruction_text.get_height())
             instruction_pos = (center_width, center_height + instruction_height_offset)
 
-            # TODO: make sure this is not called every frame
-            #       that would be very ineffecient since its a database
-            # highscore = data.get_highscore()
-            highscore = 0
+            highscore = data.get_highscore()
             highscore_str = f'HIGHSCORE: {highscore}'
             highscore_text = font.render(highscore_str, True, FONT_COLOR)
             highscore_height_offset = highscore_text.get_height()
