@@ -10,7 +10,7 @@ from constants import *
 
 # initialize
 pg.init()
-screen = pg.display.set_mode((720, 720))
+screen = pg.display.set_mode((DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT))
 clock = pg.time.Clock()
 running = True
 
@@ -29,16 +29,16 @@ class EventHandler:
                     self.stop()
 
                 case pg.K_UP:
-                    self.snake.set_direction("up")
+                    self.snake.set_direction('up')
 
                 case pg.K_DOWN:
-                    self.snake.set_direction("down")
+                    self.snake.set_direction('down')
 
                 case pg.K_LEFT:
-                    self.snake.set_direction("left")
+                    self.snake.set_direction('left')
 
                 case pg.K_RIGHT:
-                    self.snake.set_direction("right")
+                    self.snake.set_direction('right')
 
     def tick(self):
         self.tick_counter = (self.tick_counter + 1) % (FRAMERATE / 4)
@@ -65,7 +65,6 @@ class EventHandler:
 # the painter paints the board
 class Painter:
     def __init__(self, board: Board):
-        self.MARGIN_PX = 2
         self.board = board
         self.tile_size = self.calculate_tile_size()
 
@@ -80,8 +79,8 @@ class Painter:
             for y in range(self.board.height):
                 tile = self.board.get_tile(x, y)
                 assert tile != None
-                left = self.MARGIN_PX + (self.MARGIN_PX * tile.x) + tile.x * self.tile_size[0]
-                top = self.MARGIN_PX + (self.MARGIN_PX * tile.y) + tile.y * self.tile_size[1]
+                left = MARGIN_PX + (MARGIN_PX * tile.x) + tile.x * self.tile_size[0]
+                top = MARGIN_PX + (MARGIN_PX * tile.y) + tile.y * self.tile_size[1]
                 rect = Rect((left, top), (self.tile_size))
                 pg.draw.rect(screen, tile.color, rect)
 

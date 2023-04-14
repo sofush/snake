@@ -8,7 +8,7 @@ from constants import *
 class Snake:
     def __init__(self, board, start_pos: (int, int)):
         self.board = board
-        self.direction = "right"
+        self.direction = 'right'
 
         start_tile = self.board.get_tile(start_pos[0], start_pos[1])
         start_tile.color = SNAKE_COLOR

@@ -13,23 +13,23 @@ class Tile:
 
     def get_adjacent_tile(self, direction):
         match direction:
-            case "up":
+            case 'up':
                 return self.board.get_tile(self.x, self.y - 1)
 
-            case "down":
+            case 'down':
                 return self.board.get_tile(self.x, self.y + 1)
 
-            case "left":
+            case 'left':
                 return self.board.get_tile(self.x - 1, self.y)
 
-            case "right":
+            case 'right':
                 return self.board.get_tile(self.x + 1, self.y)
 
 # the board holds a two-dimensional array of tiles
 class Board:
     def __init__(self, width, height):
         if width == 0 or height == 0:
-            print("error: width and height of board must be at least 1")
+            print('error: width and height of board must be at least 1')
             exit(1)
 
         self.width = width
