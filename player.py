@@ -9,11 +9,9 @@ class Snake:
     def __init__(self, board, start_pos: (int, int)):
         self.board = board
         self.direction = 'right'
-
-        start_tile = self.board.get_tile(start_pos[0], start_pos[1])
-        start_tile.color = SNAKE_COLOR
-
-        self.tiles = deque([start_tile])
+        self.start_pos = start_pos
+        self.tiles = []
+        self.reset()
 
     # sets the direction the snake will move in on the next game tick
     def set_direction(self, direction: str):
@@ -56,4 +54,16 @@ class Snake:
             self.tiles.popleft().color = TILE_COLOR
             self.tiles.append(next_tile)
             return True
+
+    def length(self):
+        return len(self.tiles)
+
+    def reset(self):
+        for tile in self.tiles:
+            tile.color = TILE_COLOR
+
+        start_tile = self.board.get_tile(self.start_pos[0], self.start_pos[1])
+        start_tile.color = SNAKE_COLOR
+
+        self.tiles = deque([start_tile])
 
