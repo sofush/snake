@@ -21,7 +21,7 @@ clock = pg.time.Clock()
 class GameState(IntEnum):
     MENU = 1
     PLAYING = 2
-    EXITING = 3
+    STOPPING = 3
 
 state = GameState.MENU
 data = Data()
@@ -62,7 +62,7 @@ class EventHandler:
         self.tick_counter = (self.tick_counter + 1) % (FRAMERATE / 4)
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                state = GameState.EXITING
+                state = GameState.STOPPING
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_q:
                     self.stop()
@@ -73,7 +73,7 @@ class EventHandler:
 
     def stop(self):
         global state
-        state = GameState.EXITING
+        state = GameState.STOPPING
 
     def game_over(self):
         global state, data
@@ -152,7 +152,7 @@ event_handler = EventHandler(snake)
 
 board.spawn_fruit()
 
-while state != GameState.EXITING:
+while state != GameState.STOPPING:
     for event in pg.event.get():
         event_handler.handle(event)
 
