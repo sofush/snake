@@ -1,10 +1,11 @@
 from collections import deque
 from constants import *
+from board import *
 from direction import Direction
 from data import DatabaseConnection
 
 class Snake:
-    def __init__(self, board, start_pos: (int, int)):
+    def __init__(self, board: Board, start_pos: (int, int)):
         self.db = DatabaseConnection()
         self.board = board
         self.direction = Direction.DOWN
@@ -18,13 +19,13 @@ class Snake:
             if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
                 self.direction = direction
 
-    def get_head_tile(self):
+    def get_head_tile(self) -> Tile:
         return self.tiles[-1]
 
-    def get_tail_tile(self):
+    def get_tail_tile(self) -> Tile:
         return self.tiles[0]
 
-    def move(self):
+    def move(self) -> bool:
         head = self.get_head_tile()
         next_tile = head.get_adjacent_tile(self.direction)
 
@@ -44,7 +45,7 @@ class Snake:
         self.tiles.append(next_tile)
         return True
 
-    def length(self):
+    def length(self) -> int:
         return len(self.tiles)
 
     def reset(self, add_entry: bool):

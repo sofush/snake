@@ -4,7 +4,7 @@ from constants import *
 from direction import Direction
 
 class Tile:
-    def __init__(self, board, x, y, color: Color):
+    def __init__(self, board, x: int, y: int, color: Color):
         self.board = board
         self.color = color
         self.x = x
@@ -25,20 +25,20 @@ class Tile:
                 return self.board.get_tile(self.x + 1, self.y)
 
 class Board:
-    def __init__(self, width, height):
+    def __init__(self, width: int, height: int):
         if width == 0 or height == 0:
             print('error: width and height of board must be at least 1')
             exit(1)
 
         self.width = width
         self.height = height
-
         self.tiles = [[0 for x in range(width)] for y in range(height)]
+
         for x in range(width):
             for y in range(height):
                 self.tiles[y][x] = Tile(self, x, y, TILE_COLOR)
 
-    def get_tile(self, x, y):
+    def get_tile(self, x: int, y: int) -> Tile:
         return self.tiles[y % self.height][x % self.width]
 
     def spawn_fruit(self, max: int = 1):

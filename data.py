@@ -56,3 +56,4 @@ class DatabaseConnection():
                 return True
 
         return False
+
