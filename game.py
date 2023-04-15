@@ -9,6 +9,7 @@ from board import Tile, Board
 from player import Snake
 from constants import *
 from data import Data
+from direction import Direction
 
 # initialize
 pg.init()
@@ -41,16 +42,16 @@ class EventHandler:
                     self.stop()
 
                 case pg.K_UP:
-                    self.snake.set_direction('up')
+                    self.snake.set_direction(Direction.UP)
 
                 case pg.K_DOWN:
-                    self.snake.set_direction('down')
+                    self.snake.set_direction(Direction.DOWN)
 
                 case pg.K_LEFT:
-                    self.snake.set_direction('left')
+                    self.snake.set_direction(Direction.LEFT)
 
                 case pg.K_RIGHT:
-                    self.snake.set_direction('right')
+                    self.snake.set_direction(Direction.RIGHT)
 
                 case pg.K_RETURN:
                     global state

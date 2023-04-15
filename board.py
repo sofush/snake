@@ -1,6 +1,7 @@
 import random
 from pygame.color import Color
 from constants import *
+from direction import Direction
 
 # a tile has a color, unique coordinate and a pointer to the board that owns the tile
 # the pointer allows for easy navigation of the board through the class's `get_adjacent_tile` method
@@ -11,18 +12,18 @@ class Tile:
         self.x = x
         self.y = y
 
-    def get_adjacent_tile(self, direction):
+    def get_adjacent_tile(self, direction: Direction):
         match direction:
-            case 'up':
+            case Direction.UP:
                 return self.board.get_tile(self.x, self.y - 1)
 
-            case 'down':
+            case Direction.DOWN:
                 return self.board.get_tile(self.x, self.y + 1)
 
-            case 'left':
+            case Direction.LEFT:
                 return self.board.get_tile(self.x - 1, self.y)
 
-            case 'right':
+            case Direction.RIGHT:
                 return self.board.get_tile(self.x + 1, self.y)
 
 # the board holds a two-dimensional array of tiles

@@ -1,5 +1,6 @@
 from collections import deque
 from constants import *
+from direction import Direction
 
 # the snake is controlled by the player
 # the player's goal is to grow the snake
@@ -8,17 +9,14 @@ from constants import *
 class Snake:
     def __init__(self, board, start_pos: (int, int)):
         self.board = board
-        self.direction = 'right'
+        self.direction = Direction.DOWN
         self.start_pos = start_pos
         self.tiles = []
         self.reset()
 
     # sets the direction the snake will move in on the next game tick
-    def set_direction(self, direction: str):
-        if direction not in DIRECTIONS:
-            print(f'error: {direction} is not a valid direction')
-            exit(1)
-        elif self.direction != direction:
+    def set_direction(self, direction: Direction):
+        if self.direction != direction:
             destination = self.get_head_tile().get_adjacent_tile(direction)
             if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
                 self.direction = direction
