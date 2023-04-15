@@ -3,5 +3,11 @@ class Score():
         self.score = score
         self.date = date
     
-    def is_none(self):
-        return self.score == None or self.date == None
+    def is_valid(self) -> bool:
+        if not isinstance(self.score, int):
+            return False
+
+        if not isinstance(self.date, str):
+            return False
+        
+        return True

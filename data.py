@@ -51,4 +51,8 @@ class Data():
         return self.cached_highscore
 
     def has_cache(self) -> bool:
-        return self.cached_highscore != None and not self.cached_highscore.is_none()
+        if isinstance(self.cached_highscore, Score):
+            if self.cached_highscore.is_valid():
+                return True
+
+        return False
