@@ -29,7 +29,7 @@ class Data():
             self.database.commit()
             print(f'added score entry with a score of {score}')
 
-            if self.cached_highscore.is_none() or score > self.cached_highscore.score:
+            if not self.has_cache() or score > self.cached_highscore.score:
                 self.cached_highscore = Score(score, now)
                 print(f'new highscore with a score of {score}')
         except Exception as e:
@@ -49,3 +49,6 @@ class Data():
             self.cached_highscore = Score(result[0], result[1])
 
         return self.cached_highscore
+
+    def has_cache(self) -> bool:
+        return self.cached_highscore != None and not self.cached_highscore.is_none()

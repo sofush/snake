@@ -8,7 +8,6 @@ from pygame.rect import Rect
 from board import Tile, Board
 from player import Snake
 from constants import *
-from data import Data
 from direction import Direction
 
 # initialize
@@ -25,7 +24,6 @@ class GameState(IntEnum):
     STOPPING = 3
 
 state = GameState.MENU
-data = Data()
 
 # the event handler handles pygame events and ticks
 class EventHandler:
@@ -33,13 +31,13 @@ class EventHandler:
         self.tick_counter = 0
         self.snake = snake
 
-    def handle(self, event: Event):
+    def handle(self, state: GameState, event: Event) -> GameState:
         if event.type == pg.QUIT:
-            self.stop()
+            return GameState.STOPPING
         elif event.type == pg.KEYDOWN:
             match event.key:
                 case pg.K_q:
-                    self.stop()
+                    return GameState.STOPPING
 
                 case pg.K_UP:
                     self.snake.set_direction(Direction.UP)
@@ -54,33 +52,22 @@ class EventHandler:
                     self.snake.set_direction(Direction.RIGHT)
 
                 case pg.K_RETURN:
-                    global state
                     if state == GameState.MENU:
-                        state = GameState.PLAYING
+                        return GameState.PLAYING
 
-    def tick(self):
-        global state
+        return state
+
+    def tick(self, state: GameState) -> GameState:
         self.tick_counter = (self.tick_counter + 1) % (FRAMERATE / 4)
         for event in pg.event.get():
-            if event.type == pg.QUIT:
-                state = GameState.STOPPING
-            elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_q:
-                    self.stop()
+            state = self.handle(state, event)
 
         if self.tick_counter == 0 and state == GameState.PLAYING:
             if not self.snake.move():
-                self.game_over()
-
-    def stop(self):
-        global state
-        state = GameState.STOPPING
-
-    def game_over(self):
-        global state, data
-        data.add_entry(self.snake.length() - 1)
-        state = GameState.MENU
-        self.snake.reset()
+                snake.reset(True)
+                return GameState.MENU
+        
+        return state
 
 # the painter paints the board
 class Painter:
@@ -94,8 +81,7 @@ class Painter:
         screen.fill(BACKGROUND_COLOR)
 
     # draws a new frame
-    def paint(self):
-        global data
+    def paint(self, state: GameState):
         self.clear()
 
         if state == GameState.PLAYING:
@@ -119,7 +105,7 @@ class Painter:
             instruction_height_offset = -(instruction_text.get_height())
             instruction_pos = (center_width, center_height + instruction_height_offset)
 
-            highscore = data.get_highscore()
+            highscore = self.snake.data.get_highscore()
             highscore_str = f'HIGHSCORE ({highscore.date}): {highscore.score}'
             highscore_text = font.render(highscore_str, True, FONT_COLOR)
             highscore_height_offset = highscore_text.get_height()
@@ -133,7 +119,7 @@ class Painter:
             if highscore.date != None:
                 screen.blit(highscore_text, highscore_rect)
 
-    def calculate_tile_size(self):
+    def calculate_tile_size(self) -> (int, int):
         margin_width_total = MARGIN_PX * (board.width + 1)
         margin_height_total = MARGIN_PX * (board.height + 1)
 
@@ -154,11 +140,8 @@ event_handler = EventHandler(snake)
 board.spawn_fruit()
 
 while state != GameState.STOPPING:
-    for event in pg.event.get():
-        event_handler.handle(event)
-
-    event_handler.tick()
-    painter.paint()
+    state = event_handler.tick(state)
+    painter.paint(state)
     pg.display.flip()
     clock.tick(FRAMERATE)
 
