@@ -3,10 +3,6 @@ from constants import *
 from direction import Direction
 from data import DatabaseConnection
 
-# the snake is controlled by the player
-# the player's goal is to grow the snake
-# the snake grows when it moves onto a fruit which consumes the fruit
-# then a randomly selected tile will be appointed as the next fruit
 class Snake:
     def __init__(self, board, start_pos: (int, int)):
         self.db = DatabaseConnection()
@@ -16,24 +12,18 @@ class Snake:
         self.tiles = []
         self.reset(False)
 
-    # sets the direction the snake will move in on the next game tick
     def set_direction(self, direction: Direction):
         if self.direction != direction:
             destination = self.get_head_tile().get_adjacent_tile(direction)
             if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
                 self.direction = direction
 
-    # retrieves the tile that holds the snake's head
     def get_head_tile(self):
         return self.tiles[-1]
 
-    # retrieves the tile that holds the snake's tail
     def get_tail_tile(self):
         return self.tiles[0]
 
-    # updates the snake's position
-    # this returns False if the snake has moved onto itself,
-    #   otherwise it returns True
     def move(self):
         head = self.get_head_tile()
         next_tile = head.get_adjacent_tile(self.direction)

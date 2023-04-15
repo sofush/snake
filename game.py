@@ -10,7 +10,6 @@ from snake import Snake
 from constants import *
 from direction import Direction
 
-# initialize
 pg.init()
 pg.font.init()
 font = pg.font.Font(size=32)
@@ -25,7 +24,6 @@ class GameState(IntEnum):
 
 state = GameState.MENU
 
-# the event handler handles pygame events and ticks
 class EventHandler:
     def __init__(self, snake: Snake):
         self.tick_counter = 0
@@ -69,18 +67,15 @@ class EventHandler:
         
         return state
 
-# the painter paints the board
 class Painter:
     def __init__(self, board: Board, snake: Snake):
         self.snake = snake
         self.board = board
         self.tile_size = self.calculate_tile_size()
 
-    # clears the screen
     def clear(self):
         screen.fill(BACKGROUND_COLOR)
 
-    # draws a new frame
     def paint(self, state: GameState):
         self.clear()
 

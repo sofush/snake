@@ -3,8 +3,6 @@ from pygame.color import Color
 from constants import *
 from direction import Direction
 
-# a tile has a color, unique coordinate and a pointer to the board that owns the tile
-# the pointer allows for easy navigation of the board through the class's `get_adjacent_tile` method
 class Tile:
     def __init__(self, board, x, y, color: Color):
         self.board = board
@@ -26,7 +24,6 @@ class Tile:
             case Direction.RIGHT:
                 return self.board.get_tile(self.x + 1, self.y)
 
-# the board holds a two-dimensional array of tiles
 class Board:
     def __init__(self, width, height):
         if width == 0 or height == 0:
@@ -41,9 +38,6 @@ class Board:
             for y in range(height):
                 self.tiles[y][x] = Tile(self, x, y, TILE_COLOR)
 
-    # gets a tile on the board
-    # if x or y is greater than the boards width or height respectively,
-    #   it wraps around the board and returns that tile instead
     def get_tile(self, x, y):
         return self.tiles[y % self.height][x % self.width]
 
