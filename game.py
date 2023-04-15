@@ -6,7 +6,7 @@ from pygame.surface import Surface
 from pygame.event import Event
 from pygame.rect import Rect
 from board import Tile, Board
-from player import Snake
+from snake import Snake
 from constants import *
 from direction import Direction
 
