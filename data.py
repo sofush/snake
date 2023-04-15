@@ -3,12 +3,12 @@ from datetime import date
 from constants import *
 from score import Score
 
-class Data():
+class DatabaseConnection():
     def __init__(self):
-        self.database = sqlite3.connect(DATABASE_PATH)
+        self.connection = sqlite3.connect(DATABASE_PATH)
         self.cached_highscore = None
 
-        cursor = self.database.cursor()
+        cursor = self.connection.cursor()
 
         try:
             cursor.execute("""CREATE TABLE scores (
@@ -18,15 +18,15 @@ class Data():
         except Exception as e:
             print(e)
 
-        self.database.commit()
+        self.connection.commit()
 
     def add_entry(self, score: int):
         now = date.today()
-        cursor = self.database.cursor()
+        cursor = self.connection.cursor()
         
         try:
             cursor.execute("""INSERT INTO scores (score, date) VALUES (?, ?)""", (score, now))
-            self.database.commit()
+            self.connection.commit()
             print(f'added score entry with a score of {score}')
 
             if not self.has_cache() or score > self.cached_highscore.score:
@@ -37,7 +37,7 @@ class Data():
 
     def get_highscore(self) -> Score:
         if self.cached_highscore == None:
-            cursor = self.database.cursor()
+            cursor = self.connection.cursor()
 
             try:
                 cursor.execute("""SELECT MAX(score),date FROM scores""")

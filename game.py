@@ -105,7 +105,7 @@ class Painter:
             instruction_height_offset = -(instruction_text.get_height())
             instruction_pos = (center_width, center_height + instruction_height_offset)
 
-            highscore = self.snake.data.get_highscore()
+            highscore = self.snake.db.get_highscore()
             highscore_str = f'HIGHSCORE ({highscore.date}): {highscore.score}'
             highscore_text = font.render(highscore_str, True, FONT_COLOR)
             highscore_height_offset = highscore_text.get_height()

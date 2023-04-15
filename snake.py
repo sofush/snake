@@ -1,7 +1,7 @@
 from collections import deque
 from constants import *
 from direction import Direction
-from data import Data
+from data import DatabaseConnection
 
 # the snake is controlled by the player
 # the player's goal is to grow the snake
@@ -9,7 +9,7 @@ from data import Data
 # then a randomly selected tile will be appointed as the next fruit
 class Snake:
     def __init__(self, board, start_pos: (int, int)):
-        self.data = Data()
+        self.db = DatabaseConnection()
         self.board = board
         self.direction = Direction.DOWN
         self.start_pos = start_pos
@@ -59,7 +59,7 @@ class Snake:
 
     def reset(self, add_entry: bool):
         if add_entry:
-            self.data.add_entry(self.length() - 1)
+            self.db.add_entry(self.length() - 1)
 
         for tile in self.tiles:
             tile.color = TILE_COLOR
