@@ -48,9 +48,9 @@ class Snake:
     def length(self) -> int:
         return len(self.tiles)
 
-    def reset(self, add_entry: bool):
-        if add_entry:
-            self.db.add_entry(self.length() - 1)
+    def reset(self, add_score: bool):
+        if add_score:
+            self.db.add_score(self.length() - 1)
 
         for tile in self.tiles:
             tile.color = TILE_COLOR
