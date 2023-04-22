@@ -14,10 +14,13 @@ class Snake:
         self.reset(False)
 
     def set_direction(self, direction: Direction):
-        if self.direction != direction:
-            destination = self.get_head_tile().get_adjacent_tile(direction)
-            if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
-                self.direction = direction
+        if self.direction == direction:
+            return
+
+        destination = self.get_head_tile().get_adjacent_tile(direction)
+
+        if len(self.tiles) == 1 or (len(self.tiles) > 1 and destination != self.tiles[-2]):
+            self.direction = direction
 
     def get_head_tile(self) -> Tile:
         return self.tiles[-1]
