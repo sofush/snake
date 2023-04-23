@@ -57,11 +57,12 @@ class EventHandler:
 
     def tick(self, state: GameState) -> GameState:
         self.tick_counter = (self.tick_counter + 1) % (FRAMERATE / 4)
+
         for event in pg.event.get():
             state = self.handle(state, event)
 
         if self.tick_counter == 0 and state == GameState.PLAYING:
-            if not self.snake.move():
+            if self.snake.move():
                 snake.reset(True)
                 return GameState.MENU
         
