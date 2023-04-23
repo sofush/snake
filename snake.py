@@ -30,22 +30,22 @@ class Snake:
 
     def move(self) -> bool:
         head = self.get_head_tile()
-        next_tile = head.get_adjacent_tile(self.direction)
+        destination = head.get_adjacent_tile(self.direction)
 
-        if next_tile.color == FRUIT_COLOR:
-            self.tiles.append(next_tile)
-            next_tile.color = SNAKE_COLOR
+        if destination.color == FRUIT_COLOR:
+            self.tiles.append(destination)
+            destination.color = SNAKE_COLOR
 
             max_fruits = 1 + int(self.length() / 10)
             self.board.spawn_fruit(max_fruits)
             return False
 
-        if next_tile.color == SNAKE_COLOR:
+        if destination.color == SNAKE_COLOR:
             return True
 
-        next_tile.color = SNAKE_COLOR
+        destination.color = SNAKE_COLOR
         self.tiles.popleft().color = TILE_COLOR
-        self.tiles.append(next_tile)
+        self.tiles.append(destination)
         return False
 
     def length(self) -> int:
