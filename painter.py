@@ -69,3 +69,4 @@ class Painter:
 
         size = min(max_tile_width, max_tile_height)
         return (size, size)
+

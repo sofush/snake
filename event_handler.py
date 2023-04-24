@@ -48,3 +48,4 @@ class EventHandler:
                 return GameState.MENU
         
         return state
+
