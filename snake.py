@@ -1,6 +1,7 @@
 from collections import deque
 from constants import *
-from board import *
+from board import Board
+from tile import Tile
 from direction import Direction
 from data import DatabaseConnection
 

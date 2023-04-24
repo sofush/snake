@@ -5,7 +5,6 @@ from snake import Snake
 from event_handler import EventHandler
 from painter import Painter
 from constants import *
-from direction import Direction
 from game_state import GameState
 
 pg.init()

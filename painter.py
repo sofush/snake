@@ -2,7 +2,6 @@ from board import Board
 from snake import Snake
 from game_state import GameState
 from constants import *
-from pygame.surface import Surface
 from pygame.rect import Rect
 import pygame as pg
 

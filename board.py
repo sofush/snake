@@ -1,8 +1,6 @@
 import random
-from pygame.color import Color
 from constants import *
 from tile import Tile
-from direction import Direction
 
 class Board:
     def __init__(self, width: int, height: int):
