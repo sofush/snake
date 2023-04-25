@@ -26,9 +26,6 @@ class Snake:
     def get_head_tile(self) -> Tile:
         return self.tiles[-1]
 
-    def get_tail_tile(self) -> Tile:
-        return self.tiles[0]
-
     def move(self) -> bool:
         head = self.get_head_tile()
         destination = head.get_adjacent_tile(self.direction)
@@ -62,5 +59,6 @@ class Snake:
         start_tile = self.board.get_tile(self.start_pos[0], self.start_pos[1])
         start_tile.color = SNAKE_COLOR
 
+        self.direction = Direction.DOWN
         self.tiles = deque([start_tile])
 
