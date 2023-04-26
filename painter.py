@@ -54,7 +54,7 @@ class Painter:
 
             self.window.blit(instruction_text, instruction_rect)
 
-            if highscore.date != None:
+            if highscore.is_valid():
                 self.window.blit(highscore_text, highscore_rect)
 
     def calculate_tile_size(self) -> (int, int):
