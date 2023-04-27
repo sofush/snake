@@ -6,12 +6,12 @@ from direction import Direction
 from data import DatabaseConnection
 
 class Snake:
-    def __init__(self, board: Board, start_pos: (int, int)):
+    def __init__(self, board: Board, start_pos: tuple[int, int]):
         self.db = DatabaseConnection()
         self.board = board
         self.direction = Direction.DOWN
         self.start_pos = start_pos
-        self.tiles = []
+        self.tiles = deque()
         self.reset(False)
 
     def set_direction(self, direction: Direction):

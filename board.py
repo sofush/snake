@@ -10,11 +10,9 @@ class Board:
 
         self.width = width
         self.height = height
-        self.tiles = [[0 for x in range(width)] for y in range(height)]
-
-        for x in range(width):
-            for y in range(height):
-                self.tiles[y][x] = Tile(self, x, y, TILE_COLOR)
+        self.tiles = [
+            [Tile(self, x, y, TILE_COLOR) for x in range(width)]
+                for y in range(height)]
 
     def get_tile(self, x: int, y: int) -> Tile:
         return self.tiles[y % self.height][x % self.width]
@@ -31,7 +29,7 @@ class Board:
                     fruit_tiles.append(tile)
 
         if len(fruit_tiles) < max:
-            for i in range(max - len(fruit_tiles)):
+            for _ in range(max - len(fruit_tiles)):
                 fruit_tile = random.choice(normal_tiles)
                 fruit_tile.color = FRUIT_COLOR
 

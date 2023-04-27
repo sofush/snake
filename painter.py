@@ -6,7 +6,7 @@ from pygame.rect import Rect
 import pygame as pg
 
 pg.font.init()
-font = pg.font.Font(size=32)
+font = pg.font.Font(None, size=32)
 font.set_bold(True)
 
 class Painter:
@@ -57,7 +57,7 @@ class Painter:
             if highscore.is_valid():
                 self.window.blit(highscore_text, highscore_rect)
 
-    def calculate_tile_size(self) -> (int, int):
+    def calculate_tile_size(self) -> tuple[int, int]:
         margin_width_total = MARGIN_PX * (self.board.width + 1)
         margin_height_total = MARGIN_PX * (self.board.height + 1)
 
