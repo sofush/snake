@@ -20,7 +20,7 @@ class Board:
     def spawn_fruit(self, max: int = 1):
         normal_tiles = []
         fruit_tiles = []
-        
+
         for row in self.tiles:
             for tile in row:
                 if tile.color == TILE_COLOR:
@@ -28,8 +28,14 @@ class Board:
                 elif tile.color == FRUIT_COLOR:
                     fruit_tiles.append(tile)
 
-        if len(fruit_tiles) < max:
-            for _ in range(max - len(fruit_tiles)):
-                fruit_tile = random.choice(normal_tiles)
-                fruit_tile.color = FRUIT_COLOR
+        if len(fruit_tiles) >= max:
+            return
+
+        amount_to_spawn = min(max, len(normal_tiles)) - len(fruit_tiles)
+
+        if amount_to_spawn >= 1:
+            chosen_tiles = random.sample(normal_tiles, k=amount_to_spawn)
+
+            for tile in chosen_tiles:
+                tile.color = FRUIT_COLOR
 

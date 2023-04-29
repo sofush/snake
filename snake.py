@@ -61,4 +61,5 @@ class Snake:
 
         self.direction = Direction.DOWN
         self.tiles = deque([start_tile])
+        self.board.spawn_fruit()
 
