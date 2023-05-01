@@ -55,7 +55,6 @@ class DatabaseConnection():
                 username = os.environ['USERNAME']
             except Exception as e:
                 username = 'unknown'
-            username = 'unknown'
         
         print(f'got username: {username}')
         created_at = datetime.now()
